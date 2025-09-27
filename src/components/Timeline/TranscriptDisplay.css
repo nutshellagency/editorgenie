@@ -1,0 +1,347 @@
+/* Transcript Display Component Styles */
+
+.transcript-display {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: #1a1a1a;
+  color: #ffffff;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.transcript-display.dark {
+  background-color: #1a1a1a;
+  color: #ffffff;
+}
+
+.transcript-display.light {
+  background-color: #ffffff;
+  color: #333333;
+}
+
+/* Controls Section */
+.transcript-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  border-bottom: 1px solid #404040;
+  background-color: #2a2a2a;
+}
+
+.transcript-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.transcript-search-input {
+  padding: 6px 12px;
+  border: 1px solid #666666;
+  border-radius: 4px;
+  background-color: #333333;
+  color: #ffffff;
+  font-size: 14px;
+  min-width: 200px;
+}
+
+.transcript-search-input:focus {
+  outline: none;
+  border-color: #4a90e2;
+  box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.3);
+}
+
+.transcript-search-toggle {
+  padding: 6px;
+  background: none;
+  border: none;
+  color: #cccccc;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.transcript-search-toggle:hover {
+  background-color: #404040;
+}
+
+.transcript-settings {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.transcript-settings label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: #cccccc;
+  cursor: pointer;
+}
+
+.transcript-settings input[type="checkbox"] {
+  margin: 0;
+}
+
+/* Content Section */
+.transcript-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  line-height: 1.6;
+}
+
+.transcript-sentence {
+  margin-bottom: 16px;
+  padding: 8px 0;
+  border-bottom: 1px solid #333333;
+}
+
+.transcript-sentence:last-child {
+  border-bottom: none;
+}
+
+.transcript-speaker-label {
+  font-weight: bold;
+  color: #4a90e2;
+  margin-bottom: 4px;
+  font-size: 0.9em;
+}
+
+.transcript-sentence-content {
+  margin-left: showSpeakers ? 12px : 0;
+}
+
+.transcript-word {
+  display: inline-block;
+  margin: 2px 4px 2px 0;
+  padding: 2px 6px;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.transcript-word:hover {
+  background-color: rgba(74, 144, 226, 0.2);
+}
+
+.transcript-word.current {
+  background-color: rgba(74, 144, 226, 0.4);
+  border: 1px solid #4a90e2;
+  animation: pulse-current-word 2s infinite;
+}
+
+.transcript-word.highlighted {
+  background-color: rgba(255, 215, 0, 0.2);
+  border: 1px solid #ffd700;
+}
+
+.transcript-word.search-result {
+  background-color: rgba(255, 107, 53, 0.2);
+  border: 1px solid #ff6b35;
+}
+
+.transcript-word.selected {
+  background-color: rgba(74, 144, 226, 0.6);
+  border: 2px solid #4a90e2;
+}
+
+.transcript-word.low-confidence {
+  color: #ff6b6b;
+  border-bottom: 1px dotted #ff6b6b;
+}
+
+@keyframes pulse-current-word {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+/* Current Word Indicator */
+.transcript-current-indicator {
+  padding: 12px;
+  background-color: #2a2a2a;
+  border-top: 1px solid #404040;
+}
+
+.current-word-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+}
+
+.current-word-text {
+  font-weight: bold;
+  color: #4a90e2;
+}
+
+.current-word-time {
+  color: #cccccc;
+}
+
+.current-word-speaker {
+  color: #ff6b35;
+  font-style: italic;
+}
+
+/* Search Summary */
+.transcript-search-summary {
+  padding: 8px 12px;
+  background-color: #2a2a2a;
+  border-top: 1px solid #404040;
+  font-size: 12px;
+  color: #cccccc;
+  text-align: center;
+}
+
+/* Statistics */
+.transcript-stats {
+  display: flex;
+  justify-content: space-around;
+  padding: 12px;
+  background-color: #252525;
+  border-top: 1px solid #404040;
+  font-size: 11px;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.stat-label {
+  color: #999999;
+}
+
+.stat-value {
+  color: #ffffff;
+  font-weight: bold;
+}
+
+/* Font Size Variations */
+.transcript-text-small {
+  font-size: 14px;
+}
+
+.transcript-text-medium {
+  font-size: 16px;
+}
+
+.transcript-text-large {
+  font-size: 18px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .transcript-controls {
+    flex-direction: column;
+    gap: 8px;
+    align-items: stretch;
+  }
+
+  .transcript-search {
+    justify-content: center;
+  }
+
+  .transcript-search-input {
+    min-width: auto;
+    flex: 1;
+  }
+
+  .transcript-settings {
+    justify-content: center;
+  }
+
+  .transcript-content {
+    padding: 12px;
+  }
+
+  .transcript-sentence {
+    margin-bottom: 12px;
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .transcript-word {
+    border-width: 2px;
+  }
+
+  .transcript-word.current {
+    background-color: #000000;
+    color: #ffff00;
+    border-color: #ffff00;
+  }
+
+  .transcript-word.highlighted {
+    background-color: #ffff00;
+    color: #000000;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .transcript-word {
+    transition: none;
+  }
+
+  .transcript-word.current {
+    animation: none;
+  }
+}
+
+/* Focus Styles for Accessibility */
+.transcript-word:focus {
+  outline: 2px solid #ffd700;
+  outline-offset: 2px;
+}
+
+.transcript-search-input:focus {
+  outline: 2px solid #4a90e2;
+  outline-offset: 2px;
+}
+
+/* Speaker-based styling */
+.speaker-Speaker1 .transcript-speaker-label {
+  color: #ff6b6b;
+}
+
+.speaker-Speaker2 .transcript-speaker-label {
+  color: #4ecdc4;
+}
+
+.speaker-Speaker3 .transcript-speaker-label {
+  color: #45b7d1;
+}
+
+.speaker-Speaker4 .transcript-speaker-label {
+  color: #f9ca24;
+}
+
+.speaker-Speaker5 .transcript-speaker-label {
+  color: #6c5ce7;
+}
+
+/* Print Styles */
+@media print {
+  .transcript-display {
+    background-color: white;
+    color: black;
+  }
+
+  .transcript-controls,
+  .transcript-current-indicator,
+  .transcript-search-summary,
+  .transcript-stats {
+    display: none;
+  }
+
+  .transcript-word.current {
+    background-color: #ffff00 !important;
+    color: #000000 !important;
+  }
+}

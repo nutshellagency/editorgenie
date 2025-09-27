@@ -12,13 +12,30 @@ import logging
 from typing import Dict, Any, Optional
 import tempfile
 import os
+import time
 
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+# Set up logging and monitoring infrastructure
+from src.infrastructure.logging.setup import setup_infrastructure, setup_api_monitoring
+from src.infrastructure.logging.opentelemetry import (
+    trace_operation,
+    trace_video_processing,
+    record_video_processing_metrics,
+    record_ai_service_metrics
 )
-logger = logging.getLogger(__name__)
+
+# Initialize logging and monitoring
+setup_infrastructure(
+    service_name="ai-video-editor-api",
+    environment=os.getenv("ENVIRONMENT", "development"),
+    log_level=os.getenv("LOG_LEVEL", "INFO"),
+    jaeger_endpoint=os.getenv("JAEGER_ENDPOINT"),
+    otlp_endpoint=os.getenv("OTLP_ENDPOINT"),
+)
+
+# Set up API monitoring middleware
+setup_api_monitoring(app)
+
+logger = logging.getLogger("ai_video_editor.api")
 
 # Create FastAPI application
 app = FastAPI(
@@ -71,42 +88,87 @@ async def upload_video(
     Returns:
         Upload confirmation with processing status
     """
-    try:
-        # Validate file type
-        allowed_extensions = {'.mp4', '.mov', '.avi', '.mkv', '.webm'}
-        filename = file.filename or ''
-        file_extension = os.path.splitext(filename)[1].lower()
+    start_time = time.time()
 
-        if file_extension not in allowed_extensions:
-            raise HTTPException(
-                status_code=400,
-                detail=f"Unsupported file type. Allowed: {', '.join(allowed_extensions)}"
+    with trace_operation(
+        "video_upload",
+        {
+            "http.method": "POST",
+            "http.endpoint": "/upload",
+            "file.name": file.filename or "unknown",
+        }
+    ) as span:
+        try:
+            # Validate file type
+            allowed_extensions = {'.mp4', '.mov', '.avi', '.mkv', '.webm'}
+            filename = file.filename or ''
+            file_extension = os.path.splitext(filename)[1].lower()
+
+            if file_extension not in allowed_extensions:
+                span.set_status(trace.Status(trace.StatusCode.ERROR, "Invalid file type"))
+                raise HTTPException(
+                    status_code=400,
+                    detail=f"Unsupported file type. Allowed: {', '.join(allowed_extensions)}"
+                )
+
+            # Save uploaded file temporarily
+            with tempfile.NamedTemporaryFile(
+                delete=False,
+                suffix=file_extension
+            ) as temp_file:
+                content = await file.read()
+                temp_file.write(content)
+                temp_file_path = temp_file.name
+
+            # Record metrics
+            upload_duration = time.time() - start_time
+            record_video_processing_metrics(
+                video_id=filename,
+                duration=upload_duration,
+                file_size=len(content),
+                success=True,
+                operation="upload"
             )
 
-        # Save uploaded file temporarily
-        with tempfile.NamedTemporaryFile(
-            delete=False,
-            suffix=file_extension
-        ) as temp_file:
-            content = await file.read()
-            temp_file.write(content)
-            temp_file_path = temp_file.name
+            logger.info(
+                "Video uploaded successfully",
+                filename=filename,
+                size=len(content),
+                duration=upload_duration
+            )
 
-        logger.info(f"Video uploaded: {file.filename}, size: {len(content)} bytes")
+            span.set_status(trace.Status(trace.StatusCode.OK))
 
-        logger.info(f"Video uploaded: {file.filename}, size: {len(content)} bytes")
+            return {
+                "message": "Video uploaded successfully",
+                "filename": filename,
+                "size": len(content),
+                "temp_path": temp_file_path,
+                "status": "uploaded",
+                "processing_time": upload_duration
+            }
 
-        return {
-            "message": "Video uploaded successfully",
-            "filename": file.filename,
-            "size": len(content),
-            "temp_path": temp_file_path,
-            "status": "uploaded"
-        }
+        except Exception as e:
+            # Record failed upload metrics
+            upload_duration = time.time() - start_time
+            record_video_processing_metrics(
+                video_id=filename,
+                duration=upload_duration,
+                file_size=0,
+                success=False,
+                operation="upload",
+                error=str(e)
+            )
 
-    except Exception as e:
-        logger.error(f"Upload error: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"Upload failed: {str(e)}")
+            logger.error(
+                "Video upload failed",
+                filename=filename,
+                error=str(e),
+                duration=upload_duration
+            )
+
+            span.set_status(trace.Status(trace.StatusCode.ERROR, str(e)))
+            raise HTTPException(status_code=500, detail=f"Upload failed: {str(e)}")
 
 @app.post("/process")
 async def process_video(request: Dict[str, Any]) -> Dict[str, Any]:
@@ -119,18 +181,78 @@ async def process_video(request: Dict[str, Any]) -> Dict[str, Any]:
     Returns:
         Processing job information and status
     """
-    try:
-        # This will be implemented with the node system
-        return {
-            "message": "Processing pipeline not yet implemented",
-            "job_id": "placeholder",
-            "status": "pending",
-            "estimated_time": "TBD"
-        }
+    start_time = time.time()
 
-    except Exception as e:
-        logger.error(f"Processing error: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"Processing failed: {str(e)}")
+    with trace_operation(
+        "video_processing",
+        {
+            "http.method": "POST",
+            "http.endpoint": "/process",
+            "processing.nodes": len(request.get("nodes", [])),
+        }
+    ) as span:
+        try:
+            # Extract processing parameters
+            video_id = request.get("video_id", "unknown")
+            nodes = request.get("nodes", [])
+
+            logger.info(
+                "Video processing started",
+                video_id=video_id,
+                node_count=len(nodes)
+            )
+
+            # This will be implemented with the node system
+            # For now, return placeholder response
+            processing_duration = time.time() - start_time
+
+            # Record processing metrics
+            record_video_processing_metrics(
+                video_id=video_id,
+                duration=processing_duration,
+                file_size=0,  # Will be updated when actual processing is implemented
+                success=True,
+                operation="process",
+                node_count=len(nodes)
+            )
+
+            logger.info(
+                "Video processing completed",
+                video_id=video_id,
+                duration=processing_duration
+            )
+
+            span.set_status(trace.Status(trace.StatusCode.OK))
+
+            return {
+                "message": "Processing pipeline not yet implemented",
+                "job_id": "placeholder",
+                "status": "pending",
+                "estimated_time": "TBD",
+                "processing_time": processing_duration
+            }
+
+        except Exception as e:
+            processing_duration = time.time() - start_time
+
+            # Record failed processing metrics
+            record_video_processing_metrics(
+                video_id=request.get("video_id", "unknown"),
+                duration=processing_duration,
+                file_size=0,
+                success=False,
+                operation="process",
+                error=str(e)
+            )
+
+            logger.error(
+                "Video processing failed",
+                error=str(e),
+                duration=processing_duration
+            )
+
+            span.set_status(trace.Status(trace.StatusCode.ERROR, str(e)))
+            raise HTTPException(status_code=500, detail=f"Processing failed: {str(e)}")
 
 @app.get("/status/{job_id}")
 async def get_job_status(job_id: str) -> Dict[str, Any]:

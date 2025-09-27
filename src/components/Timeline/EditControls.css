@@ -1,0 +1,407 @@
+/**
+ * EditControls component styles.
+ *
+ * Comprehensive styling for the edit controls toolbar and interface,
+ * including responsive design, accessibility, and theme support.
+ */
+
+.edit-controls {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-secondary, #2a2a2a);
+  border: 1px solid var(--border-color, #404040);
+  border-radius: 8px;
+  padding: 12px;
+  gap: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.edit-controls-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+}
+
+.edit-button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: var(--button-bg, #3a3a3a);
+  color: var(--text-primary, #ffffff);
+  border: 1px solid var(--border-color, #555);
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 32px;
+  user-select: none;
+}
+
+.edit-button:hover:not(:disabled) {
+  background: var(--button-hover-bg, #4a4a4a);
+  border-color: var(--accent-color, #007acc);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.edit-button:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.edit-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: var(--button-disabled-bg, #2a2a2a);
+  color: var(--text-disabled, #888);
+}
+
+.edit-button.delete {
+  background: var(--danger-bg, #d32f2f);
+  color: var(--danger-text, #ffffff);
+  border-color: var(--danger-border, #d32f2f);
+}
+
+.edit-button.delete:hover:not(:disabled) {
+  background: var(--danger-hover-bg, #f44336);
+  border-color: var(--danger-hover-border, #f44336);
+}
+
+.separator {
+  width: 1px;
+  height: 24px;
+  background: var(--border-color, #555);
+  margin: 0 4px;
+}
+
+.edit-controls-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--text-secondary, #cccccc);
+  text-align: center;
+  min-height: 32px;
+  justify-content: center;
+}
+
+.selected-count {
+  color: var(--accent-color, #4da6ff);
+  font-weight: 500;
+}
+
+.clipboard-count {
+  color: var(--success-color, #4caf50);
+  font-weight: 500;
+}
+
+.edit-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  padding: 8px;
+  background: var(--progress-bg, rgba(0, 0, 0, 0.3));
+  border-radius: 4px;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 4px;
+  background: var(--progress-track-bg, #404040);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent-color, #007acc), var(--accent-light, #4da6ff));
+  border-radius: 2px;
+  animation: progress-indeterminate 1.5s ease-in-out infinite;
+}
+
+@keyframes progress-indeterminate {
+  0% {
+    width: 0%;
+    transform: translateX(0%);
+  }
+  50% {
+    width: 100%;
+    transform: translateX(0%);
+  }
+  100% {
+    width: 0%;
+    transform: translateX(100%);
+  }
+}
+
+.edit-progress span {
+  font-size: 11px;
+  color: var(--text-secondary, #cccccc);
+  font-style: italic;
+}
+
+/* Icon styles */
+.icon-cut::before { content: "✂️"; }
+.icon-copy::before { content: "📋"; }
+.icon-paste::before { content: "📌"; }
+.icon-delete::before { content: "🗑️"; }
+.icon-undo::before { content: "↶"; }
+.icon-redo::before { content: "↷"; }
+.icon-trim-start::before { content: "⏪"; }
+.icon-trim-end::before { content: "⏩"; }
+.icon-split::before { content: "⚡"; }
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .edit-controls {
+    padding: 8px;
+    gap: 8px;
+  }
+
+  .edit-controls-toolbar {
+    gap: 4px;
+    justify-content: flex-start;
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+
+  .edit-button {
+    padding: 6px 8px;
+    font-size: 11px;
+    min-width: 32px;
+    flex-shrink: 0;
+  }
+
+  .separator {
+    height: 20px;
+    margin: 0 2px;
+  }
+
+  .edit-controls-info {
+    font-size: 10px;
+    min-height: 28px;
+  }
+}
+
+@media (max-width: 480px) {
+  .edit-controls-toolbar {
+    gap: 2px;
+  }
+
+  .edit-button {
+    padding: 4px 6px;
+    min-width: 28px;
+  }
+
+  .edit-button span {
+    display: none; /* Hide text on very small screens */
+  }
+
+  .separator {
+    display: none; /* Hide separators on very small screens */
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .edit-controls {
+    border-width: 2px;
+  }
+
+  .edit-button {
+    border-width: 2px;
+  }
+
+  .edit-button:focus {
+    outline: 3px solid var(--focus-color, #ffffff);
+    outline-offset: 2px;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .edit-button {
+    transition: none;
+  }
+
+  .edit-button:hover:not(:disabled) {
+    transform: none;
+  }
+
+  .progress-fill {
+    animation: none;
+  }
+}
+
+/* Print styles */
+@media print {
+  .edit-controls {
+    display: none;
+  }
+}
+
+/* Dark theme adjustments */
+@media (prefers-color-scheme: dark) {
+  .edit-controls {
+    background: var(--bg-secondary, #1e1e1e);
+    border-color: var(--border-color, #404040);
+  }
+
+  .edit-button {
+    background: var(--button-bg, #3a3a3a);
+    color: var(--text-primary, #ffffff);
+    border-color: var(--border-color, #555);
+  }
+
+  .edit-button:hover:not(:disabled) {
+    background: var(--button-hover-bg, #4a4a4a);
+    border-color: var(--accent-color, #007acc);
+  }
+
+  .edit-button:disabled {
+    background: var(--button-disabled-bg, #2a2a2a);
+    color: var(--text-disabled, #888);
+  }
+}
+
+/* Light theme adjustments */
+@media (prefers-color-scheme: light) {
+  .edit-controls {
+    background: var(--bg-secondary, #f5f5f5);
+    border-color: var(--border-color, #d0d0d0);
+  }
+
+  .edit-button {
+    background: var(--button-bg, #ffffff);
+    color: var(--text-primary, #333333);
+    border-color: var(--border-color, #cccccc);
+  }
+
+  .edit-button:hover:not(:disabled) {
+    background: var(--button-hover-bg, #f0f0f0);
+    border-color: var(--accent-color, #007acc);
+  }
+
+  .edit-button:disabled {
+    background: var(--button-disabled-bg, #f8f8f8);
+    color: var(--text-disabled, #999999);
+  }
+
+  .separator {
+    background: var(--border-color, #d0d0d0);
+  }
+
+  .edit-controls-info {
+    color: var(--text-secondary, #666666);
+  }
+}
+
+/* Focus management */
+.edit-button:focus {
+  outline: 2px solid var(--focus-color, #007acc);
+  outline-offset: 2px;
+}
+
+.edit-button:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.edit-button:focus-visible {
+  outline: 2px solid var(--focus-color, #007acc);
+  outline-offset: 2px;
+}
+
+/* Touch targets for mobile */
+@media (hover: none) and (pointer: coarse) {
+  .edit-button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* Animation for button states */
+@keyframes button-press {
+  0% { transform: scale(1); }
+  50% { transform: scale(0.95); }
+  100% { transform: scale(1); }
+}
+
+.edit-button:active:not(:disabled) {
+  animation: button-press 0.1s ease-in-out;
+}
+
+/* Loading state styles */
+.edit-button.loading {
+  position: relative;
+  color: transparent;
+}
+
+.edit-button.loading::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 12px;
+  height: 12px;
+  margin: -6px 0 0 -6px;
+  border: 2px solid var(--text-disabled, #888);
+  border-top-color: var(--accent-color, #007acc);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Tooltip styles */
+.edit-button::before {
+  content: attr(title);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--tooltip-bg, #333);
+  color: var(--tooltip-text, #fff);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 1000;
+}
+
+.edit-button::after {
+  content: "";
+  position: absolute;
+  bottom: calc(100% - 4px);
+  left: 50%;
+  transform: translateX(-50%);
+  border: 4px solid transparent;
+  border-top-color: var(--tooltip-bg, #333);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 1000;
+}
+
+.edit-button:hover::before,
+.edit-button:hover::after {
+  opacity: 1;
+}
+
+/* Hide tooltips on touch devices */
+@media (hover: none) and (pointer: coarse) {
+  .edit-button::before,
+  .edit-button::after {
+    display: none;
+  }
+}
