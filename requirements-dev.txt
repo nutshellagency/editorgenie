@@ -1,0 +1,63 @@
+# Testing framework
+pytest==7.4.3
+pytest-asyncio==0.21.1
+pytest-cov==4.1.0
+pytest-xdist==3.5.0
+pytest-mock==3.12.0
+pytest-html==4.1.1
+
+# Code quality
+black==22.10.0
+isort==5.12.0
+flake8==6.0.0
+flake8-bandit==4.1.1
+flake8-bugbear==23.9.16
+flake8-comprehensions==3.14.0
+flake8-docstrings==1.7.0
+flake8-import-order==0.18.2
+flake8-return==1.2.0
+flake8-simplify==0.20.0
+
+# Type checking
+mypy==1.7.1
+
+# Security scanning
+bandit==1.7.5
+safety==2.3.5
+detect-secrets==1.4.0
+
+# Pre-commit hooks
+pre-commit==3.5.0
+
+# Test coverage
+coverage[toml]==7.3.2
+
+# Mocking and fixtures
+responses==0.24.1
+aioresponses==0.7.6
+freezegun==1.2.2
+
+# API testing
+httpx==0.25.2
+
+# Documentation
+mkdocs==1.5.3
+mkdocs-material==9.4.8
+
+# Development tools
+ipython==8.16.1
+ipdb==0.13.13
+
+# Performance testing
+# locust==2.17.0  # Temporarily disabled due to compatibility issues
+
+# Visual regression testing
+playwright==1.39.0
+pytest-playwright==0.4.4
+
+# Contract testing
+jsonschema==4.19.2
+
+# Replay system testing
+deepdiff==6.7.1
+dictdiffer==0.9.0

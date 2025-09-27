@@ -1,0 +1,260 @@
+/* ===== RESIZABLE PANELS SYSTEM ===== */
+.resizable-panels {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.resizable-panels.horizontal {
+  flex-direction: row;
+}
+
+.resizable-panels.vertical {
+  flex-direction: column;
+}
+
+.resizable-panels.resizing {
+  cursor: col-resize;
+}
+
+.resizable-panels.resizing.vertical {
+  cursor: row-resize;
+}
+
+/* ===== PANEL STYLES ===== */
+.resizable-panel {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  background-color: var(--surface-color);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.resizable-panel.collapsed {
+  min-width: 0 !important;
+  min-height: 0 !important;
+  width: 0 !important;
+  height: 0 !important;
+  overflow: hidden;
+}
+
+.resizable-panel .panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0.75rem;
+  background-color: var(--surface-elevated);
+  border-bottom: 1px solid var(--border-color);
+  min-height: 40px;
+}
+
+.resizable-panel .panel-content {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+
+/* ===== RESIZE HANDLE STYLES ===== */
+.resize-handle {
+  position: relative;
+  background-color: var(--background-tertiary);
+  border: none;
+  cursor: col-resize;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 50;
+}
+
+.resize-handle.vertical {
+  cursor: row-resize;
+  width: 100%;
+  height: 8px;
+  border-top: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.resize-handle.horizontal {
+  width: 8px;
+  height: 100%;
+  border-left: 1px solid var(--border-color);
+  border-right: 1px solid var(--border-color);
+}
+
+.resize-handle:hover {
+  background-color: var(--color-primary);
+  box-shadow: 0 0 0 1px var(--color-primary);
+}
+
+.resize-handle.active {
+  background-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.3);
+}
+
+.resize-handle .handle-indicator {
+  position: absolute;
+  background-color: var(--text-tertiary);
+  border-radius: 2px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.resize-handle.horizontal .handle-indicator {
+  width: 2px;
+  height: 24px;
+}
+
+.resize-handle.vertical .handle-indicator {
+  width: 24px;
+  height: 2px;
+}
+
+.resize-handle:hover .handle-indicator {
+  background-color: var(--color-white);
+}
+
+.resize-handle.active .handle-indicator {
+  background-color: var(--color-white);
+}
+
+/* ===== COLLAPSE BUTTON STYLES ===== */
+.collapse-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  background-color: var(--surface-color);
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.collapse-button:hover {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  border-color: var(--color-primary);
+  transform: scale(1.05);
+}
+
+.collapse-button:active {
+  transform: scale(0.95);
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+@media (max-width: 768px) {
+  .resizable-panel {
+    border-radius: 0;
+  }
+
+  .resize-handle.horizontal {
+    width: 12px;
+  }
+
+  .resize-handle.vertical {
+    height: 12px;
+  }
+
+  .resize-handle .handle-indicator {
+    opacity: 0.7;
+  }
+}
+
+/* ===== ACCESSIBILITY ===== */
+.resize-handle:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.collapse-button:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* ===== ANIMATION STATES ===== */
+@keyframes slideInFromLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInFromRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.resizable-panel:first-child {
+  animation: slideInFromLeft 0.3s ease-out;
+}
+
+.resizable-panel:last-child {
+  animation: slideInFromRight 0.3s ease-out;
+}
+
+/* ===== DARK THEME SUPPORT ===== */
+[data-theme="dark"] .resize-handle {
+  background-color: var(--background-tertiary);
+  border-color: var(--border-color);
+}
+
+[data-theme="dark"] .resize-handle:hover {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+[data-theme="dark"] .collapse-button {
+  border-color: var(--border-color);
+  background-color: var(--surface-color);
+  color: var(--text-secondary);
+}
+
+[data-theme="dark"] .collapse-button:hover {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-white);
+}
+
+/* ===== HIGH CONTRAST SUPPORT ===== */
+@media (prefers-contrast: high) {
+  .resize-handle {
+    border-width: 2px;
+  }
+
+  .resize-handle .handle-indicator {
+    background-color: var(--text-primary);
+  }
+
+  .collapse-button {
+    border-width: 2px;
+  }
+}
+
+/* ===== REDUCED MOTION SUPPORT ===== */
+@media (prefers-reduced-motion: reduce) {
+  .resizable-panel,
+  .resize-handle,
+  .collapse-button,
+  .resize-handle .handle-indicator {
+    transition: none;
+    animation: none;
+  }
+}

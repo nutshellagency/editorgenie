@@ -1,0 +1,168 @@
+## Relevant Files
+
+- `src/core/nodes/base.py` - Abstract base class for all processing nodes with contract system and execution framework
+- `src/core/nodes/__init__.py` - Node module exports and public API
+- `src/core/schemas/base.py` - Core schema definitions (NodeType, NodeStatus, BaseNodeInput, BaseNodeOutput, NodeContract, JobManifest)
+- `src/core/schemas/__init__.py` - Schema module exports
+- `src/core/replay/manifest.py` - Replay manifest system for job reproducibility and debugging
+- `src/core/replay/__init__.py` - Replay module exports
+- `src/core/__init__.py` - Core module exports and public API
+- `src/config.py` - Pydantic settings for environment-specific configuration management
+- `src/api/main.py` - FastAPI web application with video upload, processing, and status endpoints
+- `src/__init__.py` - Main package initialization
+- `tests/unit/test_core_schemas.py` - Unit tests for schema validation and data models (9 tests)
+- `tests/unit/test_core_nodes.py` - Unit tests for base node functionality and registry (48 tests)
+- `tests/unit/test_core_replay.py` - Unit tests for replay manifest system (10 tests)
+- `tests/unit/test_api.py` - Unit tests for API endpoints and error handling (13 tests)
+- `tests/unit/test_config.py` - Unit tests for configuration management (29 tests)
+- `src/core/nodes/stt.py` - STT node implementation with AssemblyAI integration and audio extraction
+- `tests/unit/test_stt_node.py` - Unit tests for STT node functionality (8 tests)
+- `src/core/nodes/shot_detection.py` - Shot detection node with Qwen Vision integration and frame analysis
+- `tests/unit/test_shot_detection_node.py` - Unit tests for shot detection node functionality (8 tests)
+- `src/core/nodes/ai_director.py` - AI Director node with rule-based timeline decisions
+- `tests/unit/test_ai_director_node.py` - Unit tests for AI Director node functionality (8 tests)
+- `src/core/nodes/assembly.py` - Assembly node implementation with FFmpeg integration for video composition
+- `src/core/nodes/export.py` - Export node with multi-format support (MP4, MOV, AVI, MKV)
+- `tests/unit/test_assembly_node.py` - Unit tests for assembly node functionality (8 tests)
+- `tests/unit/test_export_node.py` - Unit tests for export node functionality (8 tests)
+- `tests/__init__.py` - Test package initialization
+- `tests/unit/__init__.py` - Unit test module initialization
+- `requirements.txt` - Runtime dependencies (FastAPI, Pydantic, video processing libraries)
+- `requirements-dev.txt` - Development dependencies (pytest, black, mypy, bandit, playwright)
+- `pytest.ini` - Pytest configuration with coverage targets and test markers
+- `.pre-commit-config.yaml` - Pre-commit hooks for code quality (linting, formatting, security)
+- `.gitignore` - Git ignore patterns for Python projects
+- `docs/ENGINEERING-STANDARDS.md` - Comprehensive engineering standards and best practices
+- `docs/NODE-CONTRACTS.md` - Node contract system documentation and specifications
+- `docs/TESTING-STRATEGY.md` - Testing strategy and quality assurance guidelines
+- `docs/WORKFLOW-FLOWCHART.md` - Visual workflow documentation
+- `README.md` - Project overview and setup instructions
+
+### Notes
+
+- Unit tests should typically be placed alongside the code files they are testing (e.g., `MyComponent.tsx` and `MyComponent.test.tsx` in the same directory).
+- Use `pytest` for Python tests and `npm test` for frontend tests. Running without a path executes all tests found by the test configuration.
+- All nodes must implement the contract system with JSON Schema validation.
+- Replay manifests must be generated for every processing job.
+- Visual regression tests require baseline screenshots to be established.
+
+## Tasks
+
+- [x] 1.0 Project Infrastructure & Architecture Setup
+  - [x] 1.1 Create modular project structure with src/core, src/ui, src/infrastructure directories
+  - [x] 1.2 Set up Python virtual environment and dependency management
+  - [x] 1.3 Configure development tools (pre-commit hooks, linting, formatting)
+  - [x] 1.4 Implement base node contract system with JSON Schema validation
+  - [x] 1.5 Create replay manifest system for job tracking and reproducibility
+  - [x] 1.6 Set up testing framework (pytest, coverage, Playwright for E2E)
+  - [ ] 1.7 Configure CI/CD pipeline with GitHub Actions and quality gates
+  - [ ] 1.8 Set up logging and monitoring with OpenTelemetry integration
+  - [x] 1.9 Create configuration management for different environments
+  - [x] 1.10 Establish coding standards and documentation templates
+- [x] 2.0 Core Node System Implementation
+  - [x] 2.1 Write failing tests for base node class with contract validation
+  - [x] 2.2 Implement abstract base node class with input/output contracts
+  - [x] 2.3 Create node factory for dynamic node instantiation
+  - [x] 2.4 Write failing tests for STT node with dual-language support
+  - [x] 2.5 Implement STT node with AssemblyAI integration and replay manifests
+  - [x] 2.6 Write failing tests for shot detection node
+  - [x] 2.7 Implement shot detection node with Qwen Vision integration
+  - [x] 2.8 Write failing tests for AI Director node
+  - [x] 2.9 Implement AI Director node with rule-based timeline decisions
+  - [x] 2.10 Write failing tests for assembly node
+  - [x] 2.11 Implement assembly node with FFmpeg integration
+  - [ ] 2.12 Write failing tests for export node
+  - [ ] 2.13 Implement export node with multi-format support
+  - [ ] 2.14 Create node registry and dependency injection system
+  - [ ] 2.15 Implement node state management and error handling
+- [ ] 3.0 AI & Analysis Features
+  - [ ] 3.1 Write failing tests for AI service integration layer
+  - [ ] 3.2 Implement AI service abstraction for multiple providers
+  - [ ] 3.3 Integrate AssemblyAI for transcription and diarization
+  - [ ] 3.4 Write failing tests for Qwen Vision integration
+  - [ ] 3.5 Implement Qwen Vision for scene and object detection
+  - [ ] 3.6 Write failing tests for Gemini Pro integration
+  - [ ] 3.7 Integrate Gemini Pro for narrative analysis and highlights
+  - [ ] 3.8 Write failing tests for emotion detection
+  - [ ] 3.9 Implement emotion detection and speaker analysis
+  - [ ] 3.10 Write failing tests for content analysis
+  - [ ] 3.11 Build content analysis and metadata extraction
+  - [ ] 3.12 Create AI model version management and fallback system
+  - [ ] 3.13 Implement API rate limiting and cost optimization
+  - [ ] 3.14 Add AI accuracy validation and quality metrics
+- [ ] 4.0 Timeline & Preview System
+  - [ ] 4.1 Write failing tests for timeline data structures
+  - [ ] 4.2 Implement timeline data models and state management
+  - [ ] 4.3 Write failing tests for proxy video generation
+  - [ ] 4.4 Implement FFmpeg proxy generation service
+  - [ ] 4.5 Write failing tests for timeline UI components
+  - [ ] 4.6 Create interactive timeline React component with video scrubbing
+  - [ ] 4.7 Write failing tests for transcript synchronization
+  - [ ] 4.8 Implement synchronized transcript display with time alignment
+  - [ ] 4.9 Write failing tests for video preview player
+  - [ ] 4.10 Build video preview player with HLS support
+  - [ ] 4.11 Write failing tests for edit controls
+  - [ ] 4.12 Implement cut management and timeline editing controls
+  - [ ] 4.13 Write failing tests for audio waveform
+  - [ ] 4.14 Add audio waveform visualization component
+  - [ ] 4.15 Implement timeline performance optimization
+- [ ] 5.0 Export & Output Capabilities
+  - [ ] 5.1 Write failing tests for export service architecture
+  - [ ] 5.2 Implement export service with queue management
+  - [ ] 5.3 Write failing tests for multi-format video export
+  - [ ] 5.4 Implement FFmpeg-based multi-format export (MP4, MOV, AVI)
+  - [ ] 5.5 Write failing tests for aspect ratio conversion
+  - [ ] 5.6 Add aspect ratio support (16:9, 9:16, 1:1, custom)
+  - [ ] 5.7 Write failing tests for subtitle generation
+  - [ ] 5.8 Generate SRT subtitle files from transcripts
+  - [ ] 5.9 Write failing tests for professional exports
+  - [ ] 5.10 Create Premiere Pro and DaVinci Resolve project exports
+  - [ ] 5.11 Write failing tests for social media optimization
+  - [ ] 5.12 Optimize exports for social media platforms
+  - [ ] 5.13 Implement export progress tracking and notifications
+  - [ ] 5.14 Add export quality validation and error recovery
+- [ ] 6.0 User Interface & Experience
+  - [ ] 6.1 Write failing tests for node editor architecture
+  - [ ] 6.2 Implement React Flow-based node editor component
+  - [ ] 6.3 Write failing tests for preset creation interface
+  - [ ] 6.4 Build node-based preset creation and editing interface
+  - [ ] 6.5 Write failing tests for preset library
+  - [ ] 6.6 Implement preset library with search and filtering
+  - [ ] 6.7 Write failing tests for project management
+  - [ ] 6.8 Create project save/load functionality with versioning
+  - [ ] 6.9 Write failing tests for user profiles
+  - [ ] 6.10 Develop user profile and preference system
+  - [ ] 6.11 Write failing tests for onboarding
+  - [ ] 6.12 Add interactive onboarding and help system
+  - [ ] 6.13 Implement responsive design and accessibility
+  - [ ] 6.14 Create theme system (dark/light mode)
+- [ ] 7.0 Testing & Quality Assurance
+  - [ ] 7.1 Write failing tests for unit test framework setup
+  - [ ] 7.2 Set up comprehensive unit testing framework (60% coverage target)
+  - [ ] 7.3 Write failing tests for integration test suite
+  - [ ] 7.4 Implement integration tests for node-to-node interactions (25% coverage)
+  - [ ] 7.5 Write failing tests for E2E test scenarios
+  - [ ] 7.6 Create E2E tests for complete workflows (10% coverage)
+  - [ ] 7.7 Write failing tests for visual regression
+  - [ ] 7.8 Set up Playwright visual regression testing (5% coverage)
+  - [ ] 7.9 Write failing tests for performance benchmarks
+  - [ ] 7.10 Establish performance benchmarks and monitoring
+  - [ ] 7.11 Create test data management and golden dataset
+  - [ ] 7.12 Implement automated testing in CI/CD pipeline
+  - [ ] 7.13 Set up test reporting and coverage enforcement
+  - [ ] 7.14 Create testing utilities and shared fixtures
+- [ ] 8.0 Security & Performance
+  - [ ] 8.1 Write failing tests for secure file upload
+  - [ ] 8.2 Implement secure file upload with validation and virus scanning
+  - [ ] 8.3 Write failing tests for API security
+  - [ ] 8.4 Add API authentication, rate limiting, and cost management
+  - [ ] 8.5 Write failing tests for video processing security
+  - [ ] 8.6 Optimize video processing performance and memory usage
+  - [ ] 8.7 Write failing tests for monitoring system
+  - [ ] 8.8 Set up comprehensive monitoring and error tracking
+  - [ ] 8.9 Write failing tests for privacy compliance
+  - [ ] 8.10 Ensure GDPR compliance and data protection measures
+  - [ ] 8.11 Implement content moderation and PII redaction
+  - [ ] 8.12 Create backup and disaster recovery procedures
+  - [ ] 8.13 Performance optimization for large video files
+  - [ ] 8.14 Security audit and penetration testing preparation
